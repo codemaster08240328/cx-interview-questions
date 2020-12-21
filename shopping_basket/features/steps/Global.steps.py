@@ -36,6 +36,11 @@ def step_impl(context):
         )
 
 
+@given("empty basket")
+def step_impl(context):
+    print("empty basket")
+
+
 @given("the following Basket")
 def step_impl(context):
     for row in context.table:

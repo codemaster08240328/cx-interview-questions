@@ -27,6 +27,17 @@ Feature: Basket Pricer
             | Sardines              | 1             | 25        | percent   |
 
 
+    Scenario: Scenario 0
+        Given empty basket
+        Then expect a result as following:
+        """
+        {
+            "sub_total": 0.00,
+            "discount": 0.00,
+            "total": 0.00
+        }
+        """
+
     Scenario: Scenario 1
         Given the following Basket:
             | product        | quantity     |
