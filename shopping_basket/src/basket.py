@@ -1,6 +1,6 @@
 import logging
 from .super_market import SuperMarket
-from .util import free_discount, percent_discount
+from .util import bogof_discount, percent_discount
 
 
 class Basket(SuperMarket):
@@ -29,25 +29,30 @@ class Basket(SuperMarket):
 
     def checkout(self):
         for item in self.products:
-            offer = self.get_product_offer(item)
-            discount = 0
-            if offer:
-                if offer["rule"] == "free":
-                    discount = free_discount(
-                        self.products[item],
-                        self.get_product_price(item),
-                        offer["discount"],
-                        offer["circumstance"],
-                    )
-                elif offer["rule"] == "percent":
-                    discount = percent_discount(
-                        self.products[item],
-                        self.get_product_price(item),
-                        offer["discount"],
-                        offer["circumstance"],
-                    )
+            offers = self.get_product_offer(item)
+            max_discount = 0
+            if offers:
+                for offer_item in offers:
+                    if offer_item["rule"] == "bogof":
+                        discount_t = bogof_discount(
+                            self.products[item],
+                            self.get_product_price(item),
+                            offer_item["discount"],
+                            offer_item["circumstance"],
+                        )
+                        if max_discount < discount_t:
+                            max_discount = discount_t
+                    elif offer_item["rule"] == "percent":
+                        discount_t = percent_discount(
+                            self.products[item],
+                            self.get_product_price(item),
+                            offer_item["discount"],
+                            offer_item["circumstance"],
+                        )
+                        if max_discount < discount_t:
+                            max_discount = discount_t
 
-            self.discount += discount
+            self.discount += max_discount
 
         basket_pricer = {
             "sub_total": self.sub_total,
