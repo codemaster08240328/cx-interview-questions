@@ -13,16 +13,20 @@ class SuperMarket:
     }
 
     offer: {
-        'Backed Beans': {
+        'Backed Beans': [{
             'circumstance': 2,
             'discount': 1,
-            'rule': 'free'
-        },
-        'Sardines': {
+            'rule': 'bogof'
+        }],
+        'Sardines': [{
             'circumstance': 1,
             'discount': 25,
             'rule': 'percent'
-        }
+        }, {
+            'circumstance': 2,
+            'discount': 30,
+            'rule': 'percent'
+        }]
     }
     """
 
@@ -34,7 +38,16 @@ class SuperMarket:
         self.catalogue[product] = round(Decimal(float(price) + 0.001), 2)
 
     def add_offer(self, product, offer):
-        self.offer[product] = offer
+        if product in self.offer:
+            self.offer[product].append(offer)
+        else:
+            self.offer.update({product: [offer]})
+
+    def add_special_offer(self, offer):
+        if "special" in self.offer:
+            self.offer["special"].append(offer)
+        else:
+            self.offer.update({"special": [offer]})
 
     def get_product_price(self, product):
         try:

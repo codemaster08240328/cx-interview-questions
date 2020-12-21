@@ -21,7 +21,7 @@ Feature: Basket Pricer
 
         Given the following Offer:
             | product               | circumstance  | discount  | rule      |
-            | Baked Beans           | 2             | 1         | free      |
+            | Baked Beans           | 2             | 1         | bogof     |
             | Sardines              | 1             | 25        | percent   |
 
 
@@ -41,7 +41,7 @@ Feature: Basket Pricer
             """
 
 
-    Scenario: Scenario 2        
+    Scenario: Scenario 2
         Given the following Basket:
             | product        | quantity     |
             | Baked Beans    | 2            |

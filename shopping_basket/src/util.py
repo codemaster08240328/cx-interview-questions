@@ -14,3 +14,17 @@ def bogof_discount(item_q, item_p, free_c, circum):
         return round(Decimal(float(free_c * item_p) + 0.001), 2)
     else:
         return 0
+
+
+def bogof_subset_discount(item_set, free_c, circum):
+    sorted_item_set = sorted(item_set, key=lambda i: i["price"], reverse=True)
+
+    discount = 0
+    q = 0
+
+    for item in sorted_item_set:
+        q_free_c = int((item["quantity"] + q) / circum) * free_c
+        discount += round(Decimal(float(q_free_c * item["price"]) + 0.001), 2)
+        q = item["quantity"] % circum
+
+    return discount

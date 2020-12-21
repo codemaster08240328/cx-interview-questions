@@ -1,6 +1,6 @@
 import logging
 from .super_market import SuperMarket
-from .util import bogof_discount, percent_discount
+from .util import bogof_discount, percent_discount, bogof_subset_discount
 
 
 class Basket(SuperMarket):
@@ -28,6 +28,27 @@ class Basket(SuperMarket):
         self.sub_total -= self.get_product_price(product * quantity)
 
     def checkout(self):
+        special_offer = self.get_product_offer("special")
+        if special_offer:
+            for offer_item in special_offer:
+                if offer_item["rule"] == "bogof_subset_cheapest":
+                    subset_products = []
+                    for item in self.products:
+                        if offer_item["product"] in item:
+                            subset_products.append(
+                                {
+                                    "product": item,
+                                    "quantity": self.products[item],
+                                    "price": self.get_product_price(item),
+                                }
+                            )
+
+                    self.discount += bogof_subset_discount(
+                        subset_products,
+                        offer_item["discount"],
+                        offer_item["circumstance"],
+                    )
+
         for item in self.products:
             offers = self.get_product_offer(item)
             max_discount = 0

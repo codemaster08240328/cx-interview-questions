@@ -23,6 +23,19 @@ def step_impl(context):
         )
 
 
+@given("the following special Offer")
+def step_impl(context):
+    for row in context.table:
+        context.basket.add_special_offer(
+            {
+                "product": row["product"],
+                "circumstance": int(row["circumstance"]),
+                "discount": int(row["discount"]),
+                "rule": row["rule"],
+            }
+        )
+
+
 @given("the following Basket")
 def step_impl(context):
     for row in context.table:
